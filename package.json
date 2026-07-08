@@ -1,0 +1,35 @@
+{
+  "name": "reel-slideshow",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "npm run manifest && ng serve --port 4201 --open",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve": "ng serve",
+    "manifest": "node -e \"const fs=require('fs'),cp=require('child_process'),d='images',out=d+'/jpg';fs.mkdirSync(out,{recursive:true});const re=/\\.(hei[cf]|jpe?g|png|webp|tiff?)$/i;for(const n of fs.readdirSync(d)){const s=d+'/'+n;if(!fs.statSync(s).isFile()||!re.test(n))continue;const o=out+'/'+n.replace(/\\.[^.]+$/,'.jpg');if(!fs.existsSync(o))cp.execFileSync('sips',['-s','format','jpeg','-Z','2560',s,'--out',o]);}const f=fs.readdirSync(out).filter(n=>/\\.jpg$/i.test(n)).sort();fs.writeFileSync(d+'/manifest.json',JSON.stringify(f,null,2)+'\\n');console.log(f.length+' images');\""
+  },
+  "private": true,
+  "packageManager": "npm@10.8.2",
+  "dependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.3",
+    "@angular/cli": "^21.2.3",
+    "@angular/compiler-cli": "^21.2.0",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  },
+  "description": "Reel — a film-strip themed image slideshow (Angular)"
+}

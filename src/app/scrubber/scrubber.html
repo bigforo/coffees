@@ -1,0 +1,17 @@
+<!-- bottom-center scrubber: one step per image -->
+<input
+  #el
+  type="range"
+  class="scrubber"
+  min="1"
+  [max]="total() || 1"
+  step="1"
+  [value]="current() + 1"
+  (input)="scrubbed.emit(el.value)"
+  list="ticks"
+  aria-label="Slide position" />
+<datalist id="ticks">
+  @for (src of sources(); track src; let i = $index) {
+    <option [value]="i + 1"></option>
+  }
+</datalist>

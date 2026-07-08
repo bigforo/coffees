@@ -1,0 +1,30 @@
+/* right-side vertical slider — seconds per slide.
+   Base range track/thumb styling is shared globally in src/styles.css. */
+.speed{
+  position:fixed;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  z-index:10;
+}
+.speed .speed-val{
+  font-size:11px;
+  letter-spacing:0.1em;
+  color:var(--brass);
+  font-weight:bold;
+}
+.speed input[type="range"]{
+  writing-mode: vertical-lr;
+  direction: rtl;        /* larger value (slower) at the top */
+  width:4px;
+  height:200px;
+}
+
+@media (max-width: 640px){
+  .speed{ right:12px; }
+  .speed input[type="range"]{ height:130px; }
+}

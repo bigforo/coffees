@@ -1,0 +1,36 @@
+<div class="stage">
+  <div class="sprockets top"></div>
+
+  <div class="frame">
+    <div class="counter">{{ counterText() }}</div>
+    @for (src of sources(); track src; let i = $index) {
+      <img
+        [src]="src"
+        [alt]="'Slide ' + (i + 1) + ' of ' + total()"
+        [class.active]="i === current()"
+        [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+        (load)="onImgLoad($event, i)" />
+    }
+  </div>
+
+  <div class="sprockets bottom"></div>
+</div>
+
+<app-scrubber
+  [total]="total()"
+  [current]="current()"
+  [sources]="sources()"
+  (scrubbed)="onScrub($event)" />
+
+<app-speed-control
+  [holdSeconds]="holdSeconds()"
+  (changed)="onSpeed($event)" />
+
+<app-corner-controls
+  [playing]="playing()"
+  (playToggled)="togglePlaying()" />
+
+<app-image-details
+  [sources]="sources()"
+  [current]="current()"
+  [dims]="dims()" />

@@ -1,0 +1,14 @@
+/* bottom-center scrubber — one discrete step per image.
+   Base range track/thumb styling is shared globally in src/styles.css. */
+.scrubber{
+  position:fixed;
+  bottom:22px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(70vw, 900px);
+  z-index:10;
+}
+
+@media (max-width: 640px){
+  .scrubber{ width:82vw; bottom:16px; }
+}

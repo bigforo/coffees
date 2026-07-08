@@ -1,0 +1,11 @@
+<!-- bottom-right controls: pause/play + fullscreen -->
+<div class="corner-controls">
+  <button
+    (click)="playToggled.emit()"
+    [attr.aria-label]="playing() ? 'Pause slideshow' : 'Play slideshow'">
+    {{ playing() ? '⏸' : '▶' }}
+  </button>
+  <button
+    (click)="toggleFullscreen()"
+    [attr.aria-label]="isFullscreen() ? 'Exit full screen' : 'Enter full screen'">⛶</button>
+</div>

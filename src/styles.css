@@ -1,0 +1,119 @@
+:root{
+  --ink:#111008;
+  --paper:#e9e3d6;
+  --brass:#b8925a;
+  --brass-dim:#8a6d45;
+  --glass: rgba(233,227,214,0.08);
+  --dur: 0s; /* no transition — hard cut between slides */
+}
+
+*{box-sizing:border-box;}
+
+html,body{
+  height:100%;
+  margin:0;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:'Courier New', ui-monospace, monospace;
+  overflow:hidden;
+}
+
+.stage{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(ellipse at center, rgba(184,146,90,0.06) 0%, rgba(0,0,0,0) 60%),
+    var(--ink);
+}
+
+/* sprocket holes running along top/bottom, like a film strip */
+.sprockets{
+  position:absolute;
+  left:0; right:0;
+  height:22px;
+  display:flex;
+  justify-content:space-evenly;
+  align-items:center;
+  z-index:5;
+  pointer-events:none;
+}
+.sprockets.top{ top:0; }
+.sprockets.bottom{ bottom:0; }
+.sprockets span{
+  width:12px;
+  height:12px;
+  border-radius:2px;
+  background:var(--ink);
+  border:1px solid var(--brass-dim);
+}
+
+.frame{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  background:#000;
+  overflow:hidden;
+}
+
+.frame img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition: opacity var(--dur) ease-in-out, transform var(--dur) ease-in-out;
+  transform: scale(1.02);
+}
+
+.frame img.active{
+  opacity:1;
+  transform: scale(1);
+  z-index:2;
+}
+
+.counter{
+  position:absolute;
+  top:14px;
+  left:14px;
+  font-size:12px;
+  letter-spacing:0.12em;
+  color:var(--brass);
+  background:rgba(17,16,8,0.55);
+  padding:4px 8px;
+  border:1px solid var(--brass-dim);
+  z-index:3;
+}
+
+input[type="range"]{
+  -webkit-appearance:none;
+  appearance:none;
+  height:2px;
+  background:#fff;
+  outline:none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#fff;
+  cursor:pointer;
+  border:2px solid var(--ink);
+}
+input[type="range"]::-moz-range-thumb{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#fff;
+  cursor:pointer;
+  border:2px solid var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .frame img{ transition: opacity 0.01s linear; transform:none; }
+}
