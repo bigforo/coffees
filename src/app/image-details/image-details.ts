@@ -8,6 +8,7 @@ interface ImgDims {
 interface ImageInfo {
   index: string;
   file: string;
+  permalink: string;
   dims: string;
   mp: string;
   aspect: string;
@@ -23,6 +24,7 @@ export class ImageDetails {
   readonly sources = input<string[]>([]);
   readonly current = input(0);
   readonly dims = input<Record<number, ImgDims>>({});
+  readonly permalink = input('');
 
   readonly open = signal(false);
 
@@ -33,14 +35,16 @@ export class ImageDetails {
     const src = sources[i];
     const file = src ? src.slice(src.lastIndexOf('/') + 1) : '–';
     const index = `${i + 1} / ${total}`;
+    const permalink = this.permalink();
     const d = this.dims()[i];
     if (!d) {
-      return { index, file, dims: '…', mp: '…', aspect: '…' };
+      return { index, file, permalink, dims: '…', mp: '…', aspect: '…' };
     }
     const g = this.gcd(d.w, d.h);
     return {
       index,
       file,
+      permalink,
       dims: `${d.w} × ${d.h}`,
       mp: `${((d.w * d.h) / 1e6).toFixed(1)} MP`,
       aspect: `${d.w / g}:${d.h / g}`,

@@ -49,3 +49,5 @@
   letter-spacing:0.12em;
 }
 .info-val{ color:var(--paper); text-align:right; word-break:break-all; }
+a.info-val{ text-decoration-color:var(--brass-dim); text-underline-offset:3px; }
+a.info-val:hover{ color:var(--brass); }

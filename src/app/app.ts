@@ -27,7 +27,7 @@ export class App implements OnInit, OnDestroy {
   // --- state ---
   readonly sources = signal<string[]>([]);
   readonly current = signal(0);
-  readonly playing = signal(true);
+  readonly playing = signal(false);
   readonly holdSeconds = signal(1.5);
   readonly dims = signal<Record<number, ImgDims>>({});
 
@@ -46,11 +46,19 @@ export class App implements OnInit, OnDestroy {
     return t === 0 ? 'NO IMAGES' : `${this.pad(this.current() + 1)} / ${t}`;
   });
 
+  readonly currentPermalink = computed(() => {
+    const src = this.sources()[this.current()];
+    const file = this.fileName(src);
+    return file ? this.urlForFile(file).toString() : '';
+  });
+
   // --- lifecycle ---
   async ngOnInit(): Promise<void> {
     const files = await this.loadManifest();
     this.sources.set(files);
+    this.selectImageFromUrl();
     if (files.length > 0) {
+      this.syncUrlToCurrent();
       this.restartTimer();
     }
   }
@@ -81,6 +89,7 @@ export class App implements OnInit, OnDestroy {
     const t = this.total();
     if (t === 0) return;
     this.current.set(((index % t) + t) % t);
+    this.syncUrlToCurrent();
   }
 
   next(): void {
@@ -148,6 +157,13 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('window:popstate')
+  onPopState(): void {
+    if (this.selectImageFromUrl()) {
+      this.restartTimer();
+    }
+  }
+
   // Click anywhere (outside the controls) toggles play/pause; double click
   // toggles fullscreen. The single-click action is deferred briefly so a
   // double click doesn't also fire it.
@@ -180,6 +196,52 @@ export class App implements OnInit, OnDestroy {
       target instanceof Element &&
       target.closest('.scrubber, .speed, .corner-controls, .info-btn, .info-panel') !== null
     );
+  }
+
+  private selectImageFromUrl(): boolean {
+    const linkedFile = this.fileNameFromPath();
+    if (!linkedFile) return false;
+
+    const normalizedLinkedFile = linkedFile.toLowerCase();
+    const index = this.sources().findIndex((src) => this.fileName(src).toLowerCase() === normalizedLinkedFile);
+    if (index < 0) return false;
+
+    this.current.set(index);
+    return true;
+  }
+
+  private syncUrlToCurrent(): void {
+    const src = this.sources()[this.current()];
+    const file = this.fileName(src);
+    if (!file) return;
+
+    const url = this.urlForFile(file);
+    window.history.replaceState({ image: file }, '', `${url.pathname}${url.hash}`);
+  }
+
+  private urlForFile(file: string): URL {
+    const url = new URL(window.location.href);
+    url.pathname = `/${encodeURIComponent(this.fileSlug(file))}`;
+    url.search = '';
+    return url;
+  }
+
+  private fileNameFromPath(): string {
+    const url = new URL(window.location.href);
+    const lastSegment = url.pathname.split('/').filter(Boolean).at(-1);
+    if (!lastSegment) return '';
+
+    const decoded = decodeURIComponent(lastSegment);
+    return decoded.toLowerCase().endsWith('.jpg') ? decoded : `${decoded}.jpg`;
+  }
+
+  private fileSlug(file: string): string {
+    return file.replace(/\.jpg$/i, '');
+  }
+
+  private fileName(src: string | undefined): string {
+    if (!src) return '';
+    return src.slice(src.lastIndexOf('/') + 1);
   }
 
   private pad(n: number): string {
