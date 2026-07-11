@@ -28,7 +28,7 @@ export class App implements OnInit, OnDestroy {
   readonly sources = signal<string[]>([]);
   readonly current = signal(0);
   readonly playing = signal(false);
-  readonly holdSeconds = signal(1.5);
+  readonly holdSeconds = signal(0.5);
   readonly dims = signal<Record<number, ImgDims>>({});
 
   private readonly cornerControls = viewChild(CornerControls);

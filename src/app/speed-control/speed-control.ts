@@ -7,6 +7,6 @@ import { Component, input, output } from '@angular/core';
   styleUrl: './speed-control.css',
 })
 export class SpeedControl {
-  readonly holdSeconds = input(1.5);
+  readonly holdSeconds = input(0.5);
   readonly changed = output<string>();
 }

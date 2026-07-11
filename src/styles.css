@@ -117,3 +117,16 @@ input[type="range"]::-moz-range-thumb{
 @media (prefers-reduced-motion: reduce){
   .frame img{ transition: opacity 0.01s linear; transform:none; }
 }
+
+@media (max-width: 640px){
+  .frame img{
+    inset:50% auto auto 50%;
+    width:100vh;
+    height:100vw;
+    transform:translate(-50%, -50%) rotate(90deg) scale(1.02);
+  }
+
+  .frame img.active{
+    transform:translate(-50%, -50%) rotate(90deg) scale(1);
+  }
+}
